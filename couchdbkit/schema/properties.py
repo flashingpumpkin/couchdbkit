@@ -116,12 +116,13 @@ class Property(object):
         else:
             if self.choices:
                 if isinstance(self.choices, list):      choice_list = self.choices
-                if isinstance(self.choices, dict):      choice_list = self.choices.keys()
-                if isinstance(self.choices, tuple):     choice_list = [key for (key, name) in self.choices]
+                elif isinstance(self.choices, dict):      choice_list = self.choices.keys()
+                elif isinstance(self.choices, tuple):     choice_list = [key for (key, name) in self.choices]
 
-                if value not in choice_list:
+                if value not in choice_list and not self.empty(value):
                     raise BadValueError('Property %s is %r; must be one of %r' % (
                         self.name, value, choice_list))
+
         if self.validators:
             if isinstance(self.validators, (list, tuple,)):
                 for validator in self.validators:
